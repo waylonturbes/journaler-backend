@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
+    "resetdb": "npm run rollback && npm run migrate && npm run seed",
+    "cleanup": "knex seed:run --specific=01-cleanup.js",
+    "test": "cross-env NODE_ENV=testing jest ./api --verbose --runInBand"
   },
   "repository": {
     "type": "git",
@@ -28,6 +33,10 @@
     "pg": "^8.7.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "@types/jest": "^27.4.0",
+    "eslint": "^8.7.0",
+    "jest": "^27.4.7",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.1"
   }
 }
