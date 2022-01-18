@@ -1,3 +1,5 @@
+const { DB_URL_DEV, DB_URL_TEST } = require("./api/config")
+
 const sharedConfig = {
   client: "pg",
   useNullAsDefault: true,
@@ -8,11 +10,11 @@ const sharedConfig = {
 const envSettings = {
   development: {
     ...sharedConfig,
-    connection: process.env.DB_URL_DEV
+    connection: DB_URL_DEV
   },
   testing: {
     ...sharedConfig,
-    connection: process.env.DB_URL_TEST
+    connection: DB_URL_TEST
   }
 }
 
