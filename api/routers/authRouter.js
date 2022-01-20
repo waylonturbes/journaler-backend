@@ -1,10 +1,10 @@
 const router = require("express").Router()
+const Users = require("../models/usersmodel")
 
-router.all("/*", async (req, res, next) => {
+router.get("/users", async (req, res, next) => {
   try {
-    res.status(200).json({
-      message: "Please [POST] to either /api/auth/login or /api/auth/register"
-    })
+    const users = await Users.getAll()
+    res.status(200).json(users)
   } catch (err) {
     next(err)
   }
