@@ -17,8 +17,8 @@ server.get("/", (req, res) => {
 });
 
 // Error handlers
+// eslint-disable-next-line
 server.use((err, req, res, next) => {
-  // eslint-disable-line
   res.status(err.status || 500).json({
     message: err.message || "Something went wrong :(",
   });
@@ -27,7 +27,7 @@ server.use((err, req, res, next) => {
 server.all("/*", async (req, res, next) => {
   try {
     res.status(404).json({
-      message: `Unknown URL: ${req.originalUrl}`,
+      message: `This action does not exist`,
     });
   } catch (err) {
     next(err);
