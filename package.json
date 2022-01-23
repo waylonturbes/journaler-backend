@@ -11,7 +11,8 @@
     "seed": "knex seed:run",
     "resetdb": "npm run rollback && npm run migrate && npm run seed",
     "cleanup": "knex seed:run --specific=01-cleanup.js",
-    "test": "cross-env NODE_ENV=testing jest ./api --verbose --runInBand"
+    "test": "cross-env NODE_ENV=testing jest ./api --verbose --runInBand",
+    "coverage": "cross-env NODE_ENV=testing jest --coverage"
   },
   "repository": {
     "type": "git",

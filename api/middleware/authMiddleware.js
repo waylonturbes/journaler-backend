@@ -1,23 +1,18 @@
 const { registerSchema } = require("../schemas/authSchema");
 
-async function validateRegisteration(req, res, next) {
+async function validateRegistration(req, res, next) {
   try {
-    const { first_name, last_name, username, email, password } = req.body;
-    await registerSchema.validate({
-      first_name,
-      last_name,
-      username,
-      email,
-      password,
-    });
+    const validatedRegistration = await registerSchema.validate(req.body);
+    req._registration = validatedRegistration;
+    return next();
   } catch (err) {
-    next({
+    return next({
       status: 400,
-      message: err.message,
+      message: err.errors[0],
     });
   }
 }
 
 module.exports = {
-  validateRegisteration,
+  validateRegistration,
 };

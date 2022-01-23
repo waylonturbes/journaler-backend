@@ -17,21 +17,20 @@ server.get("/", (req, res) => {
 });
 
 // Error handlers
-// eslint-disable-next-line
-server.use((err, req, res, next) => {
-  res.status(err.status || 500).json({
-    message: err.message || "Something went wrong :(",
-  });
-});
-
 server.all("/*", async (req, res, next) => {
   try {
     res.status(404).json({
       message: `This action does not exist`,
     });
   } catch (err) {
-    next(err);
+    return next(err);
   }
+});
+// eslint-disable-next-line
+server.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    message: err.message || "Something went wrong :(",
+  });
 });
 
 module.exports = server;

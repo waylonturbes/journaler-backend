@@ -1,20 +1,13 @@
 const router = require("express").Router();
 const Users = require("../models/usersmodel");
-const { validateRegisteration } = require("../middleware/authMiddleware");
+const { validateRegistration } = require("../middleware/authMiddleware");
 
-router.post("/register", validateRegisteration, async (req, res, next) => {
+router.post("/register", validateRegistration, async (req, res, next) => {
   try {
-    const { first_name, last_name, username, email, password } = req.body;
-    const users = await Users.add({
-      first_name,
-      last_name,
-      username,
-      email,
-      password,
-    });
-    res.status(200).json(users);
+    const users = await Users.add(req._registration);
+    res.status(201).json(users);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 });
 

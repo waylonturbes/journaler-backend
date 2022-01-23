@@ -14,7 +14,7 @@ afterAll(async () => {
 });
 
 describe("[POST] /api/auth/register", () => {
-  it('responds with the message "successfully registered {username}" and status code 201 if request body is valid', async () => {
+  it('if request body is valid, respond with the message "Successfully registered {username}" and status code 201', async () => {
     const expectedMessage = /successfully registered/i;
     const res = await request(server).post("/api/auth/register").send({
       username: "frodo",
@@ -24,40 +24,40 @@ describe("[POST] /api/auth/register", () => {
     expect(res.status).toBe(201);
     expect(res.body.message).toMatch(expectedMessage);
   });
-  it('responds with the message "email required" and status code 400 if request body lacks an email', async () => {
-    const expectedMessage = /email required/i;
+  it('if request body lacks an email, respond with the message "Email address is required" and status code 400', async () => {
+    const expectedMessage = /email address is required/i;
     const res = await request(server).post("/api/auth/register").send({
       username: "frodo",
       email: "",
       password: "1234",
     });
-    expect(res.status).toBe(201);
+    expect(res.status).toBe(400);
     expect(res.body.message).toMatch(expectedMessage);
   });
-  it('responds with the message "username already exists" and status code 400 if the request body\'s username already exists', async () => {
+  it('if the request body\'s username already exists, respond with the message "Username already exists" and status code 400', async () => {
     const expectedMessage = /username already exists/i;
     const res = await request(server).post("/api/auth/register").send({
-      username: "frodo",
+      username: "joe_smith",
+      email: "smith@joe.imp",
+      password: "1234",
+    });
+    expect(res.status).toBe(400);
+    expect(res.body.message).toMatch(expectedMessage);
+  });
+  it('if the request body lacks a username, respond with the message "Username is required" and status code 400', async () => {
+    const expectedMessage = /username is required/i;
+    const res = await request(server).post("/api/auth/register").send({
+      username: "",
       email: "fordo@shire.me",
       password: "1234",
     });
     expect(res.status).toBe(400);
     expect(res.body.message).toMatch(expectedMessage);
   });
-  it('responds with the message "username required" and status code 400 if the request body lacks a username', async () => {
-    const expectedMessage = /username required/i;
+  it('if the request body lacks a password, respond with the message "Password is required" and status code 400', async () => {
+    const expectedMessage = /password is required/i;
     const res = await request(server).post("/api/auth/register").send({
-      username: "",
-      email: "fordo@shire.me",
-      password: "bad",
-    });
-    expect(res.status).toBe(400);
-    expect(res.body.message).toMatch(expectedMessage);
-  });
-  it('responds with the message "password required" and status code 400 if the request body lacks a password', async () => {
-    const expectedMessage = /password required/i;
-    const res = await request(server).post("/api/auth/register").send({
-      username: "bad",
+      username: "frodo",
       email: "fordo@shire.me",
       password: "",
     });
