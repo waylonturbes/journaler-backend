@@ -34,15 +34,35 @@ describe("[POST] /api/auth/register", () => {
     expect(res.status).toBe(400);
     expect(res.body.message).toMatch(expectedMessage);
   });
-  it('if the request body\'s username already exists, respond with the message "Username already exists" and status code 400', async () => {
-    const expectedMessage = /username already exists/i;
+  it('if the request body\'s username is taken, respond with the message "Username {username} is taken" and status code 409', async () => {
+    const expectedMessage = /is taken/i;
     const res = await request(server).post("/api/auth/register").send({
       username: "joe_smith",
       email: "smith@joe.imp",
       password: "1234",
     });
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(409);
     expect(res.body.message).toMatch(expectedMessage);
+  });
+  it('if the request body\'s email is taken, respond with the message "Email {email} is taken" and status code 409', async () => {
+    const expectedMessage = /is taken/i;
+    const res = await request(server).post("/api/auth/register").send({
+      username: "smith_joe",
+      email: "joe.smith@genericnames.net",
+      password: "1234",
+    });
+    expect(res.status).toBe(409);
+    expect(res.body.message).toMatch(expectedMessage);
+  });
+  it("if both the request body's username & email are taken, respond with the message object containing both their error messages and status code 409", async () => {
+    const res = await request(server).post("/api/auth/register").send({
+      username: "joe_smith",
+      email: "joe.smith@genericnames.net",
+      password: "1234",
+    });
+    expect(res.status).toBe(409);
+    expect(res.body.message).toHaveProperty("username");
+    expect(res.body.message).toHaveProperty("email");
   });
   it('if the request body lacks a username, respond with the message "Username is required" and status code 400', async () => {
     const expectedMessage = /username is required/i;
