@@ -101,29 +101,48 @@ describe("[POST] /api/auth/register", () => {
 
 describe("[POST] /api/auth/login", () => {
   it('if request body is valid, respond with the message "Welcome {username}" and status code 200', async () => {
-    const expectedResponse = /welcome joe_smith/i;
+    const expectedResponse = /welcome, joe_smith!/i;
     const res = await request(server).post("/api/auth/login").send({
       username: "joe_smith",
       password: "1234",
     });
     expect(res.status).toBe(200);
-    expect(res.body.message).toMatchObject(expectedResponse);
+    expect(res.body.message).toMatch(expectedResponse);
   });
-  it('if request body has invalid password or username, respond with the message "Invalid credentials" and status code 400', async () => {
-    const expectedResponse = /invalid credentials/i;
-    // username test
-    let res = await request(server).post("/api/auth/login").send({
-      username: "Joe_Smith",
-      password: "1234",
+  it('if request body lacks a password, respond with the message "Password is required" and status code 400', async () => {
+    const expectedResponse = /password is required/i;
+    const res = await request(server).post("/api/auth/login").send({
+      username: "joe_smith",
+      password: "",
     });
     expect(res.status).toBe(400);
     expect(res.body.message).toMatch(expectedResponse);
-    // password test
-    res = await request(server).post("/api/auth/login").send({
-      username: "joe_smith",
+  });
+  it('if request body lacks a username, respond with the message "Username is required" and status code 400', async () => {
+    const expectedResponse = /username is required/i;
+    const res = await request(server).post("/api/auth/login").send({
+      username: "",
       password: "123456",
     });
     expect(res.status).toBe(400);
+    expect(res.body.message).toMatch(expectedResponse);
+  });
+  it('if request body has an unknown username, respond with the message "User does not exist" and status code 404', async () => {
+    const expectedResponse = /user does not exist/i;
+    const res = await request(server).post("/api/auth/login").send({
+      username: "Joe_Smith",
+      password: "1234",
+    });
+    expect(res.status).toBe(404);
+    expect(res.body.message).toMatch(expectedResponse);
+  });
+  it('if request body has an invalid password, respond with the message "Invalid credentials" and status code 400', async () => {
+    const expectedResponse = /invalid credentials/i;
+    const res = await request(server).post("/api/auth/login").send({
+      username: "joe_smith",
+      password: "123456",
+    });
+    expect(res.status).toBe(401);
     expect(res.body.message).toMatch(expectedResponse);
   });
 });

@@ -1,4 +1,4 @@
-const { registerSchema } = require("../schemas/authSchema");
+const { registerSchema, loginSchema } = require("../schemas/authSchema");
 const Users = require("../models/usersmodel");
 
 async function validateRegistration(req, res, next) {
@@ -22,27 +22,54 @@ async function usernameAndEmailAvailability(req, res, next) {
     return next({
       status: 409,
       message: {
-        username: `Username ${username} is taken`,
-        email: `Email ${email} is taken`,
+        username: `${username} is taken`,
+        email: `${email} is taken`,
       },
     });
   }
   if (existingUsername) {
     return next({
       status: 409,
-      message: `Username ${username} is taken`,
+      message: `${username} is taken`,
     });
   }
   if (existingEmail) {
     return next({
       status: 409,
-      message: `Email ${email} is taken`,
+      message: `${email} is taken`,
     });
   }
   return next();
 }
 
+async function validateLoginInput(req, res, next) {
+  try {
+    await loginSchema.validate(req.body);
+    next();
+  } catch (err) {
+    return next({
+      status: 400,
+      message: err.errors[0],
+    });
+  }
+}
+
+async function checkUserExists(req, res, next) {
+  const { username } = req.body;
+  const [existingUser] = await Users.getBy({ username });
+  if (existingUser === undefined) {
+    return next({
+      status: 404,
+      message: "User does not exist",
+    });
+  }
+  req._user = existingUser;
+  next();
+}
+
 module.exports = {
   validateRegistration,
   usernameAndEmailAvailability,
+  validateLoginInput,
+  checkUserExists,
 };
