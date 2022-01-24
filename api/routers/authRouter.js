@@ -43,12 +43,16 @@ router.post(
           message: "Invalid credentials",
         });
       }
+      let welcomeMessage = `Welcome, ${user.username}!`;
+      if (user.first_name !== "" && user.last_name !== "") {
+        welcomeMessage = `Welcome, ${user.first_name} ${user.last_name}!`;
+      }
       res.status(200).json({
-        message: `Welcome, ${user.username}!`,
+        message: welcomeMessage,
         token: buildToken(user),
       });
     } catch (err) {
-      next(err);
+      return next(err);
     }
   }
 );
