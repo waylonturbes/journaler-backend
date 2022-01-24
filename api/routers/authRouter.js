@@ -21,7 +21,10 @@ router.post(
         BCRYPT_ROUNDS
       );
       const users = await Users.add(req._registration);
-      res.status(201).json(users);
+      res.status(201).json({
+        message: "Successfully registered!",
+        userInfo: users,
+      });
     } catch (err) {
       return next(err);
     }

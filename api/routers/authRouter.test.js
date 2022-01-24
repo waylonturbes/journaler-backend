@@ -14,10 +14,13 @@ afterAll(async () => {
 });
 
 describe("[POST] /api/auth/register", () => {
-  it("if request body is valid, respond with the new user object and status code 201", async () => {
+  it('if request body is valid, respond with the message "Successfully registered!" new user object and status code 201', async () => {
     const expectedResponse = {
-      username: "frodo",
-      email: "fordo@shire.me",
+      message: "Successfully registered!",
+      userInfo: {
+        username: "frodo",
+        email: "fordo@shire.me",
+      },
     };
     const res = await request(server).post("/api/auth/register").send({
       username: "frodo",
@@ -87,6 +90,16 @@ describe("[POST] /api/auth/register", () => {
     expect(res.status).toBe(400);
     expect(res.body.message).toMatch(expectedResponse);
   });
+  it('if the request body username is shorter than 3 characters, respond with the message "Username must contain at least 3 characters" and status code 400', async () => {
+    const expectedResponse = /username must contain at least 3 characters/i;
+    const res = await request(server).post("/api/auth/register").send({
+      username: "ab",
+      email: "fordo@shire.me",
+      password: "1234",
+    });
+    expect(res.status).toBe(400);
+    expect(res.body.message).toMatch(expectedResponse);
+  });
   it('if the request body lacks a password, respond with the message "Password is required" and status code 400', async () => {
     const expectedResponse = /password is required/i;
     const res = await request(server).post("/api/auth/register").send({
@@ -97,13 +110,32 @@ describe("[POST] /api/auth/register", () => {
     expect(res.status).toBe(400);
     expect(res.body.message).toMatch(expectedResponse);
   });
+  it('if the request body password is shorter than 6 characters, respond with the message "Password must contain at least 6 characters" and status code 400', async () => {
+    const expectedResponse = /password must contain at least 6 characters/i;
+    const res = await request(server).post("/api/auth/register").send({
+      username: "frodo",
+      email: "fordo@shire.me",
+      password: "123",
+    });
+    expect(res.status).toBe(400);
+    expect(res.body.message).toMatch(expectedResponse);
+  });
 });
 
 describe("[POST] /api/auth/login", () => {
-  it('if request body is valid, respond with the message "Welcome {username}" and status code 200', async () => {
-    const expectedResponse = /welcome, joe_smith!/i;
+  it('if request body is valid and the user HAS a first and last name, respond with the message "Welcome {username}" and status code 200', async () => {
+    const expectedResponse = /welcome, Joe Smith!/i;
     const res = await request(server).post("/api/auth/login").send({
       username: "joe_smith",
+      password: "1234",
+    });
+    expect(res.status).toBe(200);
+    expect(res.body.message).toMatch(expectedResponse);
+  });
+  it('if request body is valid and the user DOES NOT HAVE a first and last name, respond with the message "Welcome {username}" and status code 200', async () => {
+    const expectedResponse = /welcome, barney11!/i;
+    const res = await request(server).post("/api/auth/login").send({
+      username: "barney11",
       password: "1234",
     });
     expect(res.status).toBe(200);
