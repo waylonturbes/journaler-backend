@@ -32,7 +32,6 @@ Allows a user to register for a new account
     "email": "joe_smith@gmail.com",
     "username": "joe_smith"
   }
-  }
 }
 ```
 
