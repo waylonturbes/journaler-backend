@@ -18,6 +18,7 @@ const registerSchema = yup.object().shape({
     .trim()
     .required("Password is required")
     .min(4, "Password must contain at least 6 characters"),
+  private: yup.boolean(),
 });
 
 const loginSchema = yup.object().shape({
