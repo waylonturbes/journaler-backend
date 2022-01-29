@@ -14,7 +14,7 @@ afterAll(async () => {
 });
 
 describe("[GET] /api/journals", () => {
-  it("if request body is valid, respond with an array of journal objects and status code 200", async () => {
+  it("responds with an array of journal objects and status code 200", async () => {
     const res = await request(server).get("/api/journals");
     const expectedObject = {
       journal_id: "1",
