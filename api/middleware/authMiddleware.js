@@ -48,7 +48,7 @@ async function checkUserExists(req, res, next) {
     });
   }
   req._user = existingUser;
-  next();
+  return next();
 }
 
 module.exports = {
