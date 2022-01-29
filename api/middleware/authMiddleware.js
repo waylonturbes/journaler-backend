@@ -1,5 +1,5 @@
 const { registerSchema, loginSchema } = require("../schemas/authSchema");
-const Users = require("../models/usersmodel");
+const Users = require("../models/usersModel");
 
 async function validateRegistration(req, res, next) {
   try {
@@ -14,29 +14,13 @@ async function validateRegistration(req, res, next) {
   }
 }
 
-async function usernameAndEmailAvailability(req, res, next) {
-  const { username, email } = req.body;
+async function usernameAvailability(req, res, next) {
+  const { username } = req.body;
   const [existingUsername] = await Users.getBy({ username });
-  const [existingEmail] = await Users.getBy({ email });
-  if (existingUsername && existingEmail) {
-    return next({
-      status: 409,
-      message: {
-        username: `${username} is taken`,
-        email: `${email} is taken`,
-      },
-    });
-  }
   if (existingUsername) {
     return next({
       status: 409,
       message: `${username} is taken`,
-    });
-  }
-  if (existingEmail) {
-    return next({
-      status: 409,
-      message: `${email} is taken`,
     });
   }
   return next();
@@ -69,7 +53,7 @@ async function checkUserExists(req, res, next) {
 
 module.exports = {
   validateRegistration,
-  usernameAndEmailAvailability,
+  usernameAvailability,
   validateLoginInput,
   checkUserExists,
 };

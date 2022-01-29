@@ -1,11 +1,11 @@
 const router = require("express").Router();
-const Users = require("../models/usersmodel");
+const Users = require("../models/usersModel");
 const bcrypt = require("bcryptjs");
 const { buildToken } = require("../utils/tokenUtils");
 const { BCRYPT_ROUNDS } = require("../config/index");
 const {
   validateRegistration,
-  usernameAndEmailAvailability,
+  usernameAvailability,
   validateLoginInput,
   checkUserExists,
 } = require("../middleware/authMiddleware");
@@ -13,7 +13,7 @@ const {
 router.post(
   "/register",
   validateRegistration,
-  usernameAndEmailAvailability,
+  usernameAvailability,
   async (req, res, next) => {
     try {
       req._registration.password = bcrypt.hashSync(
@@ -46,12 +46,8 @@ router.post(
           message: "Invalid credentials",
         });
       }
-      let welcomeMessage = `Welcome, ${user.username}!`;
-      if (user.first_name !== "" && user.last_name !== "") {
-        welcomeMessage = `Welcome, ${user.first_name} ${user.last_name}!`;
-      }
       res.status(200).json({
-        message: welcomeMessage,
+        message: `Welcome, ${user.username}!`,
         token: buildToken(user),
       });
     } catch (err) {
