@@ -19,7 +19,6 @@ describe("[GET] /api/users", () => {
       username: "joe_smith",
       password: "1234",
     });
-    console.log(loginRes.body);
     const res = await request(server)
       .get("/api/users")
       .set({ Authorization: loginRes.body.token });

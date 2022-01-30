@@ -29,7 +29,7 @@ async function usernameAvailability(req, res, next) {
 async function validateLoginInput(req, res, next) {
   try {
     await loginSchema.validate(req.body);
-    next();
+    return next();
   } catch (err) {
     return next({
       status: 400,
