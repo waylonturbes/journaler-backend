@@ -9,8 +9,8 @@ exports.up = async function (knex) {
       .inTable("users")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
-    users.string("title").notNullable().unique();
-    users.string("journal_entry", 2500).notNullable().unique();
+    users.string("title").notNullable();
+    users.string("journal_entry", 2500).notNullable();
     users.timestamps(false, true);
   });
 };

@@ -1,9 +1,14 @@
-const Journals = require("../models/journalsModel");
 const { journalSchema } = require("../schemas/journalSchema");
 
-async function validateJournal(req, res, next) {
+async function validateNewJournal(req, res, next) {
   try {
-    await journalSchema.validate(req.body);
+    const { title, journal_entry } = req.body;
+    const { user_id } = req.decodedToken;
+    req._journalPayload = await journalSchema.validate({
+      title,
+      journal_entry,
+      user_id,
+    });
     return next();
   } catch (err) {
     return next({
@@ -13,19 +18,4 @@ async function validateJournal(req, res, next) {
   }
 }
 
-async function titleAndJournalUniqueness(req, res, next) {
-  const { title, journal_entry } = req.body;
-  try {
-    const [existingJournal] = await Journals.getBy({ title, journal_entry });
-    if (existingJournal) {
-      return next({
-        status: 401,
-        message: "Journal title and entry must be unique",
-      });
-    }
-  } catch (err) {
-    return next();
-  }
-}
-
-module.exports = { validateJournal, titleAndJournalUniqueness };
+module.exports = { validateNewJournal };

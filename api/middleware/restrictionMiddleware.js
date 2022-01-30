@@ -1,6 +1,6 @@
 const { decodeToken } = require("../utils/tokenUtils");
 
-function checkAndDecodeToken(req, res, next) {
+function validateAndDecodeToken(req, res, next) {
   const token = req.headers.authorization;
   if (!token) {
     return next({
@@ -20,6 +20,20 @@ function checkAndDecodeToken(req, res, next) {
   }
 }
 
+// Must be called AFTER `validateAndDecodeToken()`
+function compareUserParamsAndTokenID(req, res, next) {
+  const { user_id } = req.params;
+  if (user_id === req.decodedToken.user_id) {
+    return next();
+  } else {
+    return next({
+      status: 401,
+      message: "You are not permitted to do this action!",
+    });
+  }
+}
+
 module.exports = {
-  checkAndDecodeToken,
+  validateAndDecodeToken,
+  compareUserParamsAndTokenID,
 };

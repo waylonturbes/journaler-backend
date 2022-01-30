@@ -4,7 +4,9 @@ const helmet = require("helmet");
 const authRouter = require("./routers/authRouter");
 const usersRouter = require("./routers/usersRouter");
 const journalsRouter = require("./routers/journalsRouter");
-const { checkAndDecodeToken } = require("./middleware/restrictionMiddleware");
+const {
+  validateAndDecodeToken,
+} = require("./middleware/restrictionMiddleware");
 
 const server = express();
 
@@ -14,7 +16,7 @@ server.use(express.json());
 
 // Routes
 server.use("/api/auth", authRouter);
-server.use("/api/users", checkAndDecodeToken, usersRouter);
+server.use("/api/users", validateAndDecodeToken, usersRouter);
 server.use("/api/journals", journalsRouter);
 
 server.get("/", (req, res) => {
