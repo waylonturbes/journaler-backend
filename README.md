@@ -49,6 +49,41 @@ Allows a registered user to sign into their account
 }
 ```
 
+<!-- ===== User Router Docs ===== -->
+
+### Users
+
+#### [POST] /api/users/:user_id/journals
+
+Allows an **authenticated user** to create a new
+
+**Inputs:**
+
+| Field         | Type   | Required | Unique |
+| ------------- | ------ | -------- | ------ |
+| title         | string | yes      | no     |
+| journal_entry | string | yes      | no     |
+
+Note: A token is required
+
+**Output:**
+
+```
+{
+  "message": "Successfully created new journal",
+  "newJournal": {
+    "journal_id": "7",
+    "user_id": "1",
+    "title": "bobobobo",
+    "journal_entry": "ha  ahahah lol",
+    "created_at": "2022-01-30T15:53:53.542Z",
+    "updated_at": "2022-01-30T15:53:53.542Z"
+  }
+}
+```
+
+<!-- ===== Journal Router Docs ===== -->
+
 ### Journals
 
 #### [GET] /api/journals
