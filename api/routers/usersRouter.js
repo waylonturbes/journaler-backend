@@ -15,10 +15,24 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post(
-  "/:user_id/journal",
-  validateNewJournal,
+router.get(
+  "/:user_id/journals",
   compareUserParamsAndTokenID,
+  async (req, res, next) => {
+    try {
+      const { user_id } = req.params;
+      const journals = await Journals.getBy({ user_id });
+      return res.status(200).json(journals);
+    } catch (err) {
+      return next(err);
+    }
+  }
+);
+
+router.post(
+  "/:user_id/journals",
+  compareUserParamsAndTokenID,
+  validateNewJournal,
   async (req, res, next) => {
     try {
       const newJournal = await Journals.add(req._journalPayload);

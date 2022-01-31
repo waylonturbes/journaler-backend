@@ -64,8 +64,6 @@ Allows an **authenticated user** to create a new
 | title         | string | yes      | no     |
 | journal_entry | string | yes      | no     |
 
-Note: A token is required
-
 **Output:**
 
 ```
@@ -74,12 +72,38 @@ Note: A token is required
   "newJournal": {
     "journal_id": "7",
     "user_id": "1",
-    "title": "bobobobo",
-    "journal_entry": "ha  ahahah lol",
+    "title": "Walk with my dog",
+    "journal_entry": "I walked my dog to the park and enjoyed the sunset.",
     "created_at": "2022-01-30T15:53:53.542Z",
     "updated_at": "2022-01-30T15:53:53.542Z"
   }
 }
+```
+
+#### [GET] /api/users/:user_id/journals
+
+Allows an **authenticated user** to retrieve an array of all their journals
+
+**Output:**
+
+```
+[
+  {
+    "journal_id": "1",
+    "title": "Playing with old friends",
+    "journal_entry": "I had a blast hanging out",
+    "created_at": "2022-01-30T18:04:57.048Z",
+    "updated_at": "2022-01-30T18:04:57.048Z"
+  },
+  {
+    "journal_id": "4",
+    "title": "Just Joe",
+    "journal_entry": "Joe joe, joe joe... joe! ...joe?",
+    "created_at": "2022-01-30T18:04:57.048Z",
+    "updated_at": "2022-01-30T18:04:57.048Z"
+  },
+  ...
+]
 ```
 
 <!-- ===== Journal Router Docs ===== -->
