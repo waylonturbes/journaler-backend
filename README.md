@@ -55,6 +55,31 @@ Allows a registered user to sign into their account
 
 ---
 
+#### [PUT] /api/users/:user_id
+
+Allows an **authenticated user** to update their accounts password and username
+
+**Inputs:**
+
+| Field    | Type   | Required | Unique | Notes                              |
+| -------- | ------ | -------- | ------ | ---------------------------------- |
+| username | string | yes      | yes    | must contain at least 3 characters |
+| password | string | yes      | no     | must contain at least 6 characters |
+
+**Output:**
+
+```
+{
+  "message": "Successfully updated account!",
+  "userInfo": {
+    "id": "1",
+    "username": "joffery_smizzy"
+  }
+}
+```
+
+---
+
 #### [POST] /api/users/:user_id/journals
 
 Allows an **authenticated user** to create a new journal
@@ -92,6 +117,7 @@ Allows an **authenticated user** to retrieve an array of all their journals
 [
   {
     "journal_id": "1",
+    "user_id": 1,
     "title": "Playing with old friends",
     "journal_entry": "I had a blast hanging out",
     "created_at": "2022-01-30T18:04:57.048Z",
@@ -99,6 +125,7 @@ Allows an **authenticated user** to retrieve an array of all their journals
   },
   {
     "journal_id": "4",
+    "user_id": 1,
     "title": "Just Joe",
     "journal_entry": "Joe joe, joe joe... joe! ...joe?",
     "created_at": "2022-01-30T18:04:57.048Z",
@@ -107,6 +134,8 @@ Allows an **authenticated user** to retrieve an array of all their journals
   ...
 ]
 ```
+
+---
 
 #### [DEL] /api/users/:user_id/journals/:journal_id
 
