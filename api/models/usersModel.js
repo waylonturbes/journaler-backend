@@ -18,7 +18,7 @@ async function getBy(filter) {
 async function add(userInfo) {
   const [newUser] = await db("users")
     .insert(userInfo)
-    .returning(["user_id", "username"]);
+    .returning(["user_id", "username", "created_at", "updated_at"]);
   return {
     user_id: newUser.user_id,
     username: newUser.username,

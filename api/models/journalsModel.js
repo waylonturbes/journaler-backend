@@ -36,8 +36,16 @@ async function add(journalInfo) {
   return newJournal;
 }
 
+async function deleteJournal(journalID) {
+  await db("journals")
+    .where(journalID)
+    .del()
+  return;
+}
+
 module.exports = {
   getAll,
   getBy,
   add,
+  deleteJournal
 };

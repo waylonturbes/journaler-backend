@@ -6,6 +6,8 @@
 
 ### User Authentication
 
+---
+
 #### [POST] /api/auth/register
 
 Allows a user to register for a new account
@@ -49,9 +51,9 @@ Allows a registered user to sign into their account
 }
 ```
 
-<!-- ===== User Router Docs ===== -->
-
 ### Users
+
+---
 
 #### [POST] /api/users/:user_id/journals
 
@@ -106,9 +108,9 @@ Allows an **authenticated user** to retrieve an array of all their journals
 ]
 ```
 
-<!-- ===== Journal Router Docs ===== -->
-
 ### Journals
+
+---
 
 #### [GET] /api/journals
 

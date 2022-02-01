@@ -46,4 +46,20 @@ router.post(
   }
 );
 
+router.delete(
+  "/:user_id/journals/:journal_id",
+  compareUserParamsAndTokenID,
+  async (req, res, next) => {
+    try {
+      const { journal_id } = req.params;
+      await Journals.deleteJournal({ journal_id });
+      return res.status(200).json({
+        message: `Deleted journal ${journal_id}`,
+      });
+    } catch (err) {
+      return next(err);
+    }
+  }
+);
+
 module.exports = router;
