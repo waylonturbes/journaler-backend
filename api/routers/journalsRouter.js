@@ -4,7 +4,7 @@ const Journals = require("../models/journalsModel");
 router.get("/", async (req, res, next) => {
   try {
     const journals = await Journals.getAll();
-    res.status(200).json(journals);
+    return res.status(200).json(journals);
   } catch (err) {
     return next(err);
   }

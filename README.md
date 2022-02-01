@@ -6,6 +6,8 @@
 
 ### User Authentication
 
+---
+
 #### [POST] /api/auth/register
 
 Allows a user to register for a new account
@@ -49,7 +51,107 @@ Allows a registered user to sign into their account
 }
 ```
 
+### Users
+
+---
+
+#### [PUT] /api/users/:user_id
+
+Allows an **authenticated user** to update their accounts password and username
+
+**Inputs:**
+
+| Field    | Type   | Required | Unique | Notes                              |
+| -------- | ------ | -------- | ------ | ---------------------------------- |
+| username | string | yes      | yes    | must contain at least 3 characters |
+| password | string | yes      | no     | must contain at least 6 characters |
+
+**Output:**
+
+```
+{
+  "message": "Successfully updated account!",
+  "userInfo": {
+    "id": "1",
+    "username": "joffery_smizzy"
+  }
+}
+```
+
+---
+
+#### [POST] /api/users/:user_id/journals
+
+Allows an **authenticated user** to create a new journal
+
+**Inputs:**
+
+| Field         | Type   | Required | Unique |
+| ------------- | ------ | -------- | ------ |
+| title         | string | yes      | no     |
+| journal_entry | string | yes      | no     |
+
+**Output:**
+
+```
+{
+  "message": "Successfully created new journal",
+  "newJournal": {
+    "journal_id": "7",
+    "user_id": "1",
+    "title": "Walk with my dog",
+    "journal_entry": "I walked my dog to the park and enjoyed the sunset.",
+    "created_at": "2022-01-30T15:53:53.542Z",
+    "updated_at": "2022-01-30T15:53:53.542Z"
+  }
+}
+```
+
+#### [GET] /api/users/:user_id/journals
+
+Allows an **authenticated user** to retrieve an array of all their journals
+
+**Output:**
+
+```
+[
+  {
+    "journal_id": "1",
+    "user_id": 1,
+    "title": "Playing with old friends",
+    "journal_entry": "I had a blast hanging out",
+    "created_at": "2022-01-30T18:04:57.048Z",
+    "updated_at": "2022-01-30T18:04:57.048Z"
+  },
+  {
+    "journal_id": "4",
+    "user_id": 1,
+    "title": "Just Joe",
+    "journal_entry": "Joe joe, joe joe... joe! ...joe?",
+    "created_at": "2022-01-30T18:04:57.048Z",
+    "updated_at": "2022-01-30T18:04:57.048Z"
+  },
+  ...
+]
+```
+
+---
+
+#### [DEL] /api/users/:user_id/journals/:journal_id
+
+Allows an **authenticated user** to delete one of their journals
+
+**Output:**
+
+```
+{
+  message: "Deleted journal 3"
+}
+```
+
 ### Journals
+
+---
 
 #### [GET] /api/journals
 

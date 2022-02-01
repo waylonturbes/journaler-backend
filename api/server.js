@@ -2,7 +2,11 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const authRouter = require("./routers/authRouter");
+const usersRouter = require("./routers/usersRouter");
 const journalsRouter = require("./routers/journalsRouter");
+const {
+  validateAndDecodeToken,
+} = require("./middleware/restrictionMiddleware");
 
 const server = express();
 
@@ -12,6 +16,7 @@ server.use(express.json());
 
 // Routes
 server.use("/api/auth", authRouter);
+server.use("/api/users", validateAndDecodeToken, usersRouter);
 server.use("/api/journals", journalsRouter);
 
 server.get("/", (req, res) => {
@@ -21,7 +26,7 @@ server.get("/", (req, res) => {
 // Error handlers
 server.all("/*", async (req, res, next) => {
   try {
-    res.status(404).json({
+    return res.status(404).json({
       message: `This action does not exist`,
     });
   } catch (err) {
@@ -30,7 +35,7 @@ server.all("/*", async (req, res, next) => {
 });
 // eslint-disable-next-line
 server.use((err, req, res, next) => {
-  res.status(err.status || 500).json({
+  return res.status(err.status || 500).json({
     message: err.message || "Something went wrong :(",
   });
 });

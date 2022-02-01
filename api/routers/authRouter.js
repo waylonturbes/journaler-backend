@@ -21,7 +21,7 @@ router.post(
         BCRYPT_ROUNDS
       );
       const users = await Users.add(req._registration);
-      res.status(201).json({
+      return res.status(201).json({
         message: "Successfully registered!",
         userInfo: users,
       });
@@ -46,7 +46,7 @@ router.post(
           message: "Invalid credentials",
         });
       }
-      res.status(200).json({
+      return res.status(200).json({
         message: `Welcome, ${user.username}!`,
         token: buildToken(user),
       });
