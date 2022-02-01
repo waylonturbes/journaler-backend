@@ -1,9 +1,16 @@
 const router = require("express").Router();
 const Users = require("../models/usersModel");
 const Journals = require("../models/journalsModel");
+const bcrypt = require("bcryptjs");
+const { BCRYPT_ROUNDS } = require("../config/index");
 const { validateNewJournal } = require("../middleware/journalsMiddleware");
 const {
+  usernameAvailability,
+  validateRegistration,
+} = require("../middleware/authMiddleware");
+const {
   compareUserParamsAndTokenID,
+  compareUserAndJournalID,
 } = require("../middleware/restrictionMiddleware");
 
 router.get("/", async (req, res, next) => {
@@ -14,6 +21,28 @@ router.get("/", async (req, res, next) => {
     return next(err);
   }
 });
+
+router.put(
+  "/:user_id",
+  usernameAvailability,
+  validateRegistration,
+  async (req, res, next) => {
+    try {
+      req._registration.password = bcrypt.hashSync(
+        req._registration.password,
+        BCRYPT_ROUNDS
+      );
+      const { user_id } = req.params;
+      const users = await Users.update({ ...req._registration, user_id });
+      return res.status(201).json({
+        message: "Successfully updated account!",
+        userInfo: users,
+      });
+    } catch (err) {
+      return next(err);
+    }
+  }
+);
 
 router.get(
   "/:user_id/journals",
@@ -49,6 +78,7 @@ router.post(
 router.delete(
   "/:user_id/journals/:journal_id",
   compareUserParamsAndTokenID,
+  compareUserAndJournalID,
   async (req, res, next) => {
     try {
       const { journal_id } = req.params;

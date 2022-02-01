@@ -16,7 +16,14 @@ async function getAll() {
 
 async function getBy(filter) {
   const journal = await db("journals")
-    .select("journal_id", "title", "journal_entry", "created_at", "updated_at")
+    .select(
+      "journal_id",
+      "user_id",
+      "title",
+      "journal_entry",
+      "created_at",
+      "updated_at"
+    )
     .where(filter)
     .orderBy("journal_id");
   return journal;
@@ -37,9 +44,7 @@ async function add(journalInfo) {
 }
 
 async function deleteJournal(journalID) {
-  await db("journals")
-    .where(journalID)
-    .del()
+  await db("journals").where(journalID).del();
   return;
 }
 
@@ -47,5 +52,5 @@ module.exports = {
   getAll,
   getBy,
   add,
-  deleteJournal
+  deleteJournal,
 };

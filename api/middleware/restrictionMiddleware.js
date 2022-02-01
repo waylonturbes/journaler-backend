@@ -1,4 +1,5 @@
 const { decodeToken } = require("../utils/tokenUtils");
+const Journals = require("../models/journalsModel");
 
 function validateAndDecodeToken(req, res, next) {
   const token = req.headers.authorization;
@@ -20,7 +21,12 @@ function validateAndDecodeToken(req, res, next) {
   }
 }
 
-// Must be called AFTER `validateAndDecodeToken()`
+/*
+ *
+ * Below must be called AFTER `validateAndDecodeToken()`
+ *
+ */
+
 function compareUserParamsAndTokenID(req, res, next) {
   const { user_id } = req.params;
   if (user_id === req.decodedToken.user_id) {
@@ -33,7 +39,21 @@ function compareUserParamsAndTokenID(req, res, next) {
   }
 }
 
+async function compareUserAndJournalID(req, res, next) {
+  const { journal_id } = req.params;
+  const [journal] = await Journals.getBy({ journal_id });
+  if (journal.user_id === req.params.user_id) {
+    return next();
+  } else {
+    return next({
+      status: 401,
+      message: "You are not permitted to do this action!",
+    });
+  }
+}
+
 module.exports = {
   validateAndDecodeToken,
   compareUserParamsAndTokenID,
+  compareUserAndJournalID,
 };
