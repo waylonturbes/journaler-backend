@@ -57,7 +57,7 @@ Allows a registered user to sign into their account
 
 #### [POST] /api/users/:user_id/journals
 
-Allows an **authenticated user** to create a new
+Allows an **authenticated user** to create a new journal
 
 **Inputs:**
 
@@ -106,6 +106,18 @@ Allows an **authenticated user** to retrieve an array of all their journals
   },
   ...
 ]
+```
+
+#### [DEL] /api/users/:user_id/journals/:journal_id
+
+Allows an **authenticated user** to delete one of their journals
+
+**Output:**
+
+```
+{
+  message: "Deleted journal 3"
+}
 ```
 
 ### Journals
