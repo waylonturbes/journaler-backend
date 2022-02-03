@@ -28,7 +28,8 @@ async function usernameAvailability(req, res, next) {
 
 async function validateLoginInput(req, res, next) {
   try {
-    await loginSchema.validate(req.body);
+    const res = await loginSchema.validate(req.body);
+    req._login = res;
     return next();
   } catch (err) {
     return next({
@@ -39,16 +40,21 @@ async function validateLoginInput(req, res, next) {
 }
 
 async function checkUserExists(req, res, next) {
-  const { username } = req.body;
-  const [existingUser] = await Users.getBy({ username });
-  if (existingUser === undefined) {
-    return next({
-      status: 404,
-      message: "User does not exist",
-    });
+  try {
+    const { username } = req._login;
+    const [existingUser] = await Users.getBy({ username });
+    req._user = existingUser;
+    if (existingUser === undefined) {
+      return next({
+        status: 404,
+        message: "User does not exist",
+      });
+    } else {
+      return next();
+    }
+  } catch (err) {
+    return next(err);
   }
-  req._user = existingUser;
-  return next();
 }
 
 module.exports = {

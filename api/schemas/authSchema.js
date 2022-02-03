@@ -10,12 +10,12 @@ const registerSchema = yup.object().shape({
     .string()
     .trim()
     .required("A password is required")
-    .min(4, "Password must contain at least 6 characters"),
+    .min(4, "Password must contain at least 4 characters"),
 });
 
 const loginSchema = yup.object().shape({
-  username: yup.string().required("Username is required"),
-  password: yup.string().required("Password is required"),
+  username: yup.string().trim().required("Username is required"),
+  password: yup.string().trim().required("Password is required"),
 });
 
 module.exports = {
