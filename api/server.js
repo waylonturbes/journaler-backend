@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const authRouter = require("./routers/authRouter");
 const usersRouter = require("./routers/usersRouter");
 const journalsRouter = require("./routers/journalsRouter");
+const handleError = require("../api/middleware/handleError");
 const {
   validateAndDecodeToken,
 } = require("./middleware/restrictionMiddleware");
@@ -33,11 +34,7 @@ server.all("/*", async (req, res, next) => {
     return next(err);
   }
 });
-// eslint-disable-next-line
-server.use((err, req, res, next) => {
-  return res.status(err.status || 500).json({
-    message: err.message || "Something went wrong :(",
-  });
-});
+
+server.use(handleError);
 
 module.exports = server;

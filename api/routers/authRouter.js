@@ -37,7 +37,7 @@ router.post(
   checkUserExists,
   async (req, res, next) => {
     try {
-      const { password } = req.body;
+      const { password } = req._login;
       const user = req._user;
       const passwordIsValid = bcrypt.compareSync(password, user.password);
       if (!passwordIsValid) {

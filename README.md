@@ -78,8 +78,6 @@ Allows an **authenticated user** to update their accounts password and username
 }
 ```
 
----
-
 #### [POST] /api/users/:user_id/journals
 
 Allows an **authenticated user** to create a new journal
@@ -134,8 +132,6 @@ Allows an **authenticated user** to retrieve an array of all their journals
   ...
 ]
 ```
-
----
 
 #### [DEL] /api/users/:user_id/journals/:journal_id
 

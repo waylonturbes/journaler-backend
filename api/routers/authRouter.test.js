@@ -68,7 +68,7 @@ describe("[POST] /api/auth/register", () => {
     expect(res.body.message).toMatch(expectedResponse);
   });
   it('if the request body password is shorter than 6 characters, respond with the message "Password must contain at least 6 characters" and status code 400', async () => {
-    const expectedResponse = /password must contain at least 6 characters/i;
+    const expectedResponse = /password must contain at least 4 characters/i;
     const res = await request(server).post("/api/auth/register").send({
       username: "frodo",
       password: "123",
@@ -114,8 +114,8 @@ describe("[POST] /api/auth/login", () => {
       username: "Lo3_Sm1tH",
       password: "1234",
     });
-    expect(res.status).toBe(404);
     expect(res.body.message).toMatch(expectedResponse);
+    expect(res.status).toBe(404);
   });
   it('if request body has an invalid password, respond with the message "Invalid credentials" and status code 400', async () => {
     const expectedResponse = /invalid credentials/i;
